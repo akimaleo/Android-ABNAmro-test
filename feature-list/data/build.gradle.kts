@@ -26,6 +26,11 @@ dependencies {
     implementation(project(":feature-list:domain"))
     implementation(project(":foundation-network"))
     implementation(project(":foundation-kotlin"))
+    implementation(project(":foundation-database"))
+
+    implementation("androidx.paging:paging-runtime:3.2.0")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha20")
+
     implementation(libs.kotlinx.serialization.json)
 
     // Dagger Hilt

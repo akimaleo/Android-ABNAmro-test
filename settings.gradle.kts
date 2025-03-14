@@ -22,9 +22,12 @@ dependencyResolutionManagement {
 rootProject.name = "ABN-Amro"
 include(":app")
 include(":feature-list")
+include(":feature-list:domain")
+include(":feature-list:data")
+
 include(":feature-detail")
+include(":feature-detail:domain")
 include(":foundation-compose")
 include(":foundation-kotlin")
 include(":foundation-network")
-include(":feature-list:domain")
-include(":feature-list:data")
+include(":foundation-database")

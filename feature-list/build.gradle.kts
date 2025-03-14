@@ -31,8 +31,11 @@ dependencies {
 
     // Dagger Hilt
     implementation(libs.dagger.hilt.android)
-    debugImplementation(libs.ui.tooling)
     kapt(libs.dagger.hilt.compiler)
+
+    // Pagination
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

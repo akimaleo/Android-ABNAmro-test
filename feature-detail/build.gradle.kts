@@ -1,7 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.dagger.hilt)
 }
+
 
 android {
     namespace = "com.kawa.abn.feature.details"
@@ -23,6 +27,11 @@ android {
 
 dependencies {
     implementation(project(":foundation-compose"))
+    implementation(project(":feature-detail:domain"))
+
+    // Dagger Hilt
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
