@@ -40,7 +40,6 @@ class ListRepositoryImpl @Inject constructor(
 ) : ListRepository {
 
     override suspend fun getRepo(id: Int): ResultOf<RepositoryItem, Throwable> {
-
         return try {
             withContext(Dispatchers.IO) {
                 mapper.map(repoDao.getRepo(id)).success()
@@ -84,8 +83,18 @@ class RepoRemoteMediator @Inject constructor(
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    val lastItem = state.lastItemOrNull()
-                        ?: return MediatorResult.Success(endOfPaginationReached = true)
+                    // FIXME: Paging library has a known issue where state.lastItemOrNull()
+                    //  returns incorrect value. It can be fixed by reading the data directly from DB
+                    //  insuring that we handle current state correctly
+                    //  https://issuetracker.google.com/issues/381126154
+                    //  val lastItem = state.lastItemOrNull()
+                    val lastItem = withContext(Dispatchers.IO) {
+                        repoDao.getAllRepos().lastOrNull()
+                    }
+                    if (lastItem == null) {
+                        Timber.d("APPEND lastItem is null")
+                        return MediatorResult.Success(endOfPaginationReached = false)
+                    }
                     val nextKey = lastItem.page + 1
                     Timber.d("APPEND page: $nextKey")
                     nextKey

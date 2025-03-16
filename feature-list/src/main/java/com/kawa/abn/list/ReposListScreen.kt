@@ -93,17 +93,17 @@ private fun ReposListContent(
                 count = state.itemCount,
                 key = state.itemKey { it.id }
             ) { index ->
-                val item =
-                    state[index] ?: error("Lazy loading on Compose layer should always succeed")
-                Timber.d("data[$index] = $item")
-
-                ListItem(
-                    repo = item,
-                    onClick = {
-                        navigateToDetailsScreen(item.id)
-                        Timber.d("ListItemClick: $item")
-                    }
-                )
+                val item = state[index]
+                item?.let {
+                    Timber.d("data[$index] = $item")
+                    ListItem(
+                        repo = item,
+                        onClick = {
+                            navigateToDetailsScreen(item.id)
+                            Timber.d("ListItemClick: $item")
+                        }
+                    )
+                }
             }
             state.apply {
                 when {

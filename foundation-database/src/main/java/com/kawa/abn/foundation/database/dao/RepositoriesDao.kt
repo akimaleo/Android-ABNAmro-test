@@ -18,6 +18,9 @@ interface RepositoriesDao {
     @Query("SELECT * FROM repos WHERE id = :id")
     fun getRepo(id: Int): RepositoryEntity
 
+    @Query("SELECT * FROM repos ORDER BY page ASC")
+    fun getAllRepos(): List<RepositoryEntity>
+
     @Query("DELETE FROM repos")
     suspend fun clearAll()
 }
