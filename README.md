@@ -32,6 +32,6 @@ Module :feature-details
 
   
 Usefull comands:
-- Verify screenhsot tests: `./gradlew validateDebugScreenshotTest`
-- Update screenhsot tests: `./gradlew updateDebugScreenshotTest`
+- Verify screenshot tests: `./gradlew validateDebugScreenshotTest`
+- Update screenshot tests: `./gradlew updateDebugScreenshotTest`
   
