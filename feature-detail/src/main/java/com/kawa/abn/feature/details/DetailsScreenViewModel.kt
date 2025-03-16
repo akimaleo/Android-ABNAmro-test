@@ -23,14 +23,21 @@ class DetailsScreenViewModel @Inject constructor(
 
     fun loadData(id: Int) {
         viewModelScope.launch {
+            _state.value = DetailsScreenState.Loading
             val result = getRepositoryDetails.invoke(id)
                 .fold(
                     onSuccess = { mapper.map(it) },
                     onError = { mapper.map(it) },
                 )
-            _state.emit(result)
+            _state.value = result
         }
     }
+}
+
+sealed class DetailsScreenState {
+    data object Loading : DetailsScreenState()
+    data class Success(val data: RepoDetailsViewData) : DetailsScreenState()
+    data class Error(val message: String) : DetailsScreenState()
 }
 
 data class RepoDetailsViewData(
@@ -42,9 +49,3 @@ data class RepoDetailsViewData(
     val isPrivate: Boolean,
     val htmlUrl: String
 )
-
-sealed class DetailsScreenState {
-    data object Loading : DetailsScreenState()
-    data class Success(val data: RepoDetailsViewData) : DetailsScreenState()
-    data class Error(val message: String) : DetailsScreenState()
-}
