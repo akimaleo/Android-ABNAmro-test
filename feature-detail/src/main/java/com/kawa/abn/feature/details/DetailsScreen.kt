@@ -3,6 +3,7 @@ package com.kawa.abn.feature.details
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,11 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,15 +30,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
@@ -63,7 +64,7 @@ fun DetailsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DetailsScreenContent(
+internal fun DetailsScreenContent(
     state: DetailsScreenState,
     onRetryClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -74,27 +75,41 @@ private fun DetailsScreenContent(
         topBar = {
             TopAppBar(
                 title = {
-                    Row(Modifier.fillMaxWidth()) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        IconButton(onBackClick) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = "go back"
+                            )
+                        }
+
                         Image(
-                            modifier = Modifier.height(32.dp),
+                            modifier = Modifier
+                                .height(32.dp)
+                                .align(Center),
                             painter = painterResource(com.kawa.abn.foundation.compose.R.drawable.abn_logo_large),
                             contentDescription = null,
                         )
-                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             )
         }
     ) { innerPadding ->
-
         Crossfade(modifier = Modifier.padding(innerPadding), targetState = state) { state ->
             when (state) {
                 is DetailsScreenState.Error -> ErrorState(
                     message = state.message,
-                    onClickRetry = onRetryClick
+                    onClickRetry = onRetryClick,
+                    modifier = Modifier.testTag("ErrorState")
                 )
 
-                DetailsScreenState.Loading -> CircularProgressIndicator(Modifier.size(100.dp))
+                DetailsScreenState.Loading -> CircularProgressIndicator(
+                    Modifier
+                        .size(100.dp)
+                        .testTag("LoadingIndicator") // Test tag added
+                )
 
                 is DetailsScreenState.Success -> {
                     DetailsScreenSuccessContent(
@@ -106,6 +121,7 @@ private fun DetailsScreenContent(
         }
     }
 }
+
 
 @Composable
 fun DetailsScreenSuccessContent(
@@ -119,14 +135,23 @@ fun DetailsScreenSuccessContent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AsyncImage(
-            model = repo.ownerImageUrl,
-            contentDescription = "Owner Avatar",
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 100.dp)
-                .background(MaterialTheme.colorScheme.primaryContainer)
-        )
+        if (LocalInspectionMode.current) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 100.dp)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+            )
+        } else {
+            AsyncImage(
+                model = repo.ownerImageUrl,
+                contentDescription = "Owner Avatar",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 100.dp)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+            )
+        }
 
         Text(
             text = repo.fullName,
@@ -182,9 +207,11 @@ fun PreviewRepoDetailsScreen() {
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.background)
         ) {
-            DetailsScreenSuccessContent(
-                repo = sampleRepo,
-                onUrlClick = { },
+            DetailsScreenContent(
+                state = DetailsScreenState.Success(sampleRepo),
+                onBackClick = {},
+                onRetryClick = {},
+                onUrlClick = {},
             )
         }
     }

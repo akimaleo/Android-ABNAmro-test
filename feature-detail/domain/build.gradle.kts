@@ -38,5 +38,5 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core.testing)
-    testImplementation ("app.cash.turbine:turbine:0.11.0")
+    testImplementation (libs.turbine)
 }

@@ -19,11 +19,12 @@ import com.kawa.abn.foundation.compose.theme.theme.ABNAmroTheme
 
 @Composable
 fun ErrorState(
+    modifier: Modifier = Modifier,
     message: String,
     onClickRetry: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .clickable { onClickRetry() },
         horizontalAlignment = Alignment.CenterHorizontally,

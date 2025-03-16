@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,10 +27,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,6 +47,8 @@ import androidx.paging.compose.itemKey
 import coil3.compose.AsyncImage
 import com.kawa.abn.feature.list.domain.entity.Visibility
 import com.kawa.abn.foundation.compose.theme.components.ErrorState
+import com.kawa.abn.foundation.compose.theme.components.loading.PageLoaderAnimation
+import com.kawa.abn.foundation.compose.theme.theme.ABNAmroTheme
 import timber.log.Timber
 
 @Composable
@@ -71,13 +74,14 @@ private fun ReposListContent(
         topBar = {
             TopAppBar(
                 title = {
-                    Row(Modifier.fillMaxWidth()) {
+                    Box(Modifier.fillMaxWidth()) {
                         Image(
-                            modifier = Modifier.height(32.dp),
+                            modifier = Modifier
+                                .height(32.dp)
+                                .align(Center),
                             painter = painterResource(com.kawa.abn.foundation.compose.R.drawable.abn_logo_large),
                             contentDescription = null,
                         )
-                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             )
@@ -104,7 +108,7 @@ private fun ReposListContent(
             state.apply {
                 when {
                     loadState.refresh is LoadState.Loading -> {
-                        item { PageLoader() }
+                        item { PageLoaderAnimation() }
                     }
 
                     loadState.refresh is LoadState.Error -> {
@@ -118,7 +122,7 @@ private fun ReposListContent(
                     }
 
                     loadState.append is LoadState.Loading -> {
-                        item { PageLoader() }
+                        item { PageLoaderAnimation() }
                     }
 
                     loadState.append is LoadState.Error -> {
@@ -136,18 +140,6 @@ private fun ReposListContent(
     }
 }
 
-@Composable
-fun PageLoader() {
-    Box(
-        modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.surface)
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        CircularProgressIndicator(modifier = Modifier.size(48.dp))
-    }
-}
 
 @Composable
 private fun ListItem(
@@ -185,9 +177,11 @@ private fun ListItem(
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
         }
-        Column {
+        Column(Modifier.weight(1f)) {
             Text(
                 text = repo.title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleLarge,
             )
@@ -197,7 +191,6 @@ private fun ListItem(
                 style = MaterialTheme.typography.titleLarge,
             )
         }
-        Spacer(Modifier.weight(1f))
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             val iconPainter = if (repo.isPrivate) {
                 painterResource(com.kawa.abn.foundation.compose.R.drawable.ic_lock_closed)
@@ -255,7 +248,7 @@ fun fakePagingItems(): LazyPagingItems<RepoViewData> {
                 return LoadResult.Page(
                     data = generatePreviewRepoData(),
                     prevKey = null,
-                    nextKey = 1
+                    nextKey = null
                 )
             }
         }
@@ -271,15 +264,17 @@ fun fakePagingItems(): LazyPagingItems<RepoViewData> {
     return pager.flow.collectAsLazyPagingItems()
 }
 
-@Preview(showBackground = true)
+@PreviewLightDark
 @Composable
 fun PreviewPagingScreen() {
     val fakeData = fakePagingItems()
     LaunchedEffect(fakeData) {
         fakeData.refresh()
     }
-    ReposListContent(
-        state = fakeData,
-        navigateToDetailsScreen = {},
-    )
+    ABNAmroTheme {
+        ReposListContent(
+            state = fakeData,
+            navigateToDetailsScreen = {},
+        )
+    }
 }
