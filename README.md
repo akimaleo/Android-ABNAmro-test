@@ -1,7 +1,7 @@
 # ABN Amro
 
 ## Test assignment
-Project is modularized and has next form: 
+Project structure UML diagram 
 
 <img width="635" alt="The UML diagram of the project" src="https://github.com/user-attachments/assets/3aa898f3-8c0a-47ae-9e24-40c1b0529bf0" />
 
