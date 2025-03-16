@@ -124,7 +124,7 @@ internal fun DetailsScreenContent(
 
 
 @Composable
-fun DetailsScreenSuccessContent(
+internal fun DetailsScreenSuccessContent(
     repo: RepoDetailsViewData,
     onUrlClick: (String) -> Unit
 ) {
@@ -191,7 +191,7 @@ fun DetailsScreenSuccessContent(
 
 @PreviewLightDark
 @Composable
-fun PreviewRepoDetailsScreen() {
+internal fun PreviewRepoDetailsScreen() {
     val sampleRepo = RepoDetailsViewData(
         title = "Jetpack Compose",
         fullName = "android/compose",

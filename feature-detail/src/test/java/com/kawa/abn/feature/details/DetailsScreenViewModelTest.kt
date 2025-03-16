@@ -1,7 +1,6 @@
 package com.kawa.abn.feature.details
 
 import app.cash.turbine.test
-import app.cash.turbine.testIn
 import com.kawa.abn.feature.details.domain.GetRepositoryDetails
 import com.kawa.abn.feature.list.domain.entity.RepositoryItem
 import com.kawa.abn.foundation.kotlin.error
@@ -11,11 +10,9 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class DetailsScreenViewModelTest {

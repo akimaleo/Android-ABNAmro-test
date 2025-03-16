@@ -32,6 +32,7 @@ targetSdk = "35"
 jetbrainsKotlinJvm = "2.0.21"
 turbine = "0.11.0"
 uiTestJunit4 = "1.7.8"
+screenshot = "0.0.1-alpha09"
 uiTestManifest = "1.7.8"
 uiTooling = "1.7.8"
 mapsSecret = "2.0.1"
@@ -101,3 +102,4 @@ kotlin-kapt = { id = "kotlin-kapt" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin" }
+screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot"}

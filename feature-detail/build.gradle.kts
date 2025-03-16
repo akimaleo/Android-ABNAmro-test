@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.screenshot)
 }
 
 
@@ -23,6 +24,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
 }
 
 dependencies {
@@ -43,6 +45,8 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core.testing)
     testImplementation (libs.turbine)
+
+    screenshotTestImplementation(libs.androidx.ui.tooling)
 
     androidTestImplementation(libs.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
