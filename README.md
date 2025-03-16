@@ -34,4 +34,10 @@ Module :feature-details
 Usefull comands:
 - Verify screenshot tests: `./gradlew validateDebugScreenshotTest`
 - Update screenshot tests: `./gradlew updateDebugScreenshotTest`
-  
+
+
+# Repositories List
+List of repositories is getting fetched from https://api.github.com/users/abnamrocoesd/repos?page=1&per_page=10 using Retrofit library. Pagination 
+ and caching of the data being managed by Room database and Pagination 3 Library which has Jetpack Compose Support.
+
+
