@@ -1,4 +1,4 @@
-# ABN Amro
+# <img src="https://github.com/user-attachments/assets/df86b661-fc64-4f61-969f-51be9d4de990" width="20" /> ABN Amro 
 
 ## Test assignment
 Project structure UML diagram 
