@@ -28,7 +28,7 @@ Modules covered by unit tests:
 - :feature-details
 - :feature-details:domain
 
-# Screenshost testing
+# Screenshot testing
 Module :feature-details
 - DetailsScreenScreenshotTest
 
