@@ -1,5 +1,6 @@
 package com.kawa.abn.feature.details
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kawa.abn.feature.details.domain.GetRepositoryDetails
@@ -23,14 +24,19 @@ class DetailsScreenViewModel @Inject constructor(
 
     fun loadData(id: Int) {
         viewModelScope.launch {
-            _state.value = DetailsScreenState.Loading
-            val result = getRepositoryDetails.invoke(id)
-                .fold(
-                    onSuccess = { mapper.map(it) },
-                    onError = { mapper.map(it) },
-                )
-            _state.value = result
+            loadRepo(id)
         }
+    }
+
+    @VisibleForTesting
+    suspend fun loadRepo(id: Int) {
+        _state.value = DetailsScreenState.Loading
+        val result = getRepositoryDetails.invoke(id)
+            .fold(
+                onSuccess = { mapper.map(it) },
+                onError = { mapper.map(it) },
+            )
+        _state.value = result
     }
 }
 

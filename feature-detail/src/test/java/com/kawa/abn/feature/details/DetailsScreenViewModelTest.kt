@@ -36,11 +36,12 @@ class DetailsScreenViewModelTest {
             val mockRepositoryItem = mockk<RepositoryItem>()
             val mockRepoDetailsViewData = mockk<RepoDetailsViewData>()
             coEvery { getRepositoryDetails.invoke(repoId) } returns mockRepositoryItem.success()
-            every { mapper.map(mockRepositoryItem) } returns
-                    DetailsScreenState.Success(mockRepoDetailsViewData)
+            every { mapper.map(mockRepositoryItem) } returns DetailsScreenState.Success(
+                mockRepoDetailsViewData
+            )
 
             // When
-            viewModel.loadData(repoId)
+            viewModel.loadRepo(repoId)
 
             // Verify
             viewModel.state.test {
@@ -61,7 +62,7 @@ class DetailsScreenViewModelTest {
         every { mapper.map(any<Throwable>()) } returns DetailsScreenState.Error(errorMessage)
 
         // When
-        viewModel.loadData(repoId)
+        viewModel.loadRepo(repoId)
 
         // Verify
         viewModel.state.test {
